@@ -77,8 +77,6 @@ static void int512_sum_long_posTop_negSum_negAddition \
 		else
 			self->at[TOP_LEVEL] = addition;
 	}
-
-
 }
 
 static void int512_sum_long_posTop_negSum_posAddition \
@@ -92,8 +90,6 @@ static void int512_sum_long_posTop_negSum_posAddition \
 			self->at[i] = 0;
 
 		self->at[TOP_LEVEL] = -1 * addition;
-
-		return;
 	}
 
 	else {
@@ -101,14 +97,65 @@ static void int512_sum_long_posTop_negSum_posAddition \
 			int512_sum_long_posTop_negSum_posAddition (self, previousLevel-1, addition);
 
 		else {
-			for (int i = previousLevel-1; i < COUNT_LEVEL; i++)
+			for (int i = previousLevel-1; i < TOP_LEVEL; i++)
 				self->at[i] = LONG_MIN;
 
 			self->at[TOP_LEVEL] = LONG_MIN - addition;
-
-			return;
 		}
 	}
+}
+
+int512_sum_long_negTop_posSum_posAddition \
+	(int512 * self, int previousLevel, long addition) {
+
+	if (self->at[previousLevel-1] == 0) {
+
+		if (previousLevel != 1)
+			int512_sum_long_negTop_posSum_posAddition (self, previousLevel-1, addition);
+
+		else
+			self->at[TOP_LEVEL] = addition;
+	}
+
+	else if (self->at[previousLevel-1] < 0) {
+
+		self->at[previousLevel-1]++;
+
+		for (int i = previousLevel; i < TOP_LEVEL; i++)
+			self->at[i] = LONG_MIN;
+
+		self->at[TOP_LEVEL] = LONG_MIN + addition;
+	}
+
+}
+
+int512_sum_long_negTop_posSum_negAddition \
+	(int512 * self, int previousLevel, long addition) {
+
+	if (self->at[previousLevel-1] > LONG_MIN) {
+
+		self->at[previousLevel-1]--;
+
+		for (int i = previousLevel; i < TOP_LEVEL; i++)
+			self->at[i] = 0;
+
+		self->at[TOP_LEVEL] = LONG_MIN + addition;
+	}
+
+	else {
+		if (previousLevel != 1)
+			int512_sum_long_negTop_posSum_negAddition (self, previousLevel-1, addition);
+
+		else {
+			for (int i = previousLevel-1; i < TOP_LEVEL; i++)
+				self->at[i] = LONG_MAX;
+
+			self->at[TOP_LEVEL] = LONG_MAX + addition;
+		}
+	}
+
+
+
 }
 
 void int512_sum_long (int512 * self, long addition) {
@@ -154,6 +201,44 @@ void int512_sum_long (int512 * self, long addition) {
 			else {
 				int512_sum_long (self, addition-1);
 				int512_sum_long (self, 1);
+				// @TODO change to lower level solution
+			}
+		}
+
+	}
+
+	else if (self->at[TOP_LEVEL] < 0) {
+
+		if ((self->at[TOP_LEVEL] + addition) < 0) {
+			self->at[TOP_LEVEL] += addition;
+			return;
+		}
+
+		else if ((self->at[TOP_LEVEL] + addition) > 0) {
+
+			if (addition > 0) {
+
+				addition += self->at[TOP_LEVEL];
+
+				int512_sum_long_negTop_posSum_posAddition (self, TOP_LEVEL, addition);
+			}
+
+			else {
+
+				addition = LONG_MIN + self->at[TOP_LEVEL] + addition;
+
+				int512_sum_long_negTop_posSum_negAddition (self, TOP_LEVEL, addition);
+			}
+
+		}
+
+		else {
+			if (addition > 0)
+				self->at[TOP_LEVEL] = 0;
+
+			else {
+				int512_sum_long (self, addition+1);
+				int512_sum_long (self, -1);
 				// @TODO change to lower level solution
 			}
 		}
