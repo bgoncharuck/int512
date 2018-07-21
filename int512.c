@@ -56,24 +56,39 @@ long long int512_at (int512 * self, int i) {
 	return self->at[i];
 }
 
-static void int512_sum_long_topIsMinus_negativeAddition
+static void int512_sum_long_posTop_negSum_negAddition \
 	(int512 * self, int previousLevel, long addition) {
 
+	if (self->at[previousLevel-1] > 0) {
 
+		self->at[previousLevel-1]--;
 
+		for (int i = previousLevel; i < TOP_LEVEL; i++)
+			self->at[i] = LONG_MAX;
 
+		self->at[TOP_LEVEL] = LONG_MAX + addition;
+	}
+
+	else if (self->at[previousLevel-1] == 0) {
+
+		if (previousLevel != 1)
+			int512_sum_long_posTop_negSum_negAddition (self, previousLevel-1, addition);
+
+		else
+			self->at[TOP_LEVEL] = addition;
+	}
 
 
 }
 
-static void int512_sum_long_topIsMinus_positiveAddition
+static void int512_sum_long_posTop_negSum_posAddition \
 	(int512 * self, int previousLevel, long addition) {
 
 	if (self->at[previousLevel-1] < LONG_MAX) {
 
 		self->at[previousLevel-1]++;
 
-		for (int i = previousLevel; i < COUNT_LEVEL; i++)
+		for (int i = previousLevel; i < TOP_LEVEL; i++)
 			self->at[i] = 0;
 
 		self->at[TOP_LEVEL] = -1 * addition;
@@ -81,10 +96,9 @@ static void int512_sum_long_topIsMinus_positiveAddition
 		return;
 	}
 
-	// else if (self->at[previousLevel-1] == LONG_MAX) {
 	else {
 		if (previousLevel != 1)
-			int512_sum_long_topIsMinus_positiveAddition (self, previousLevel-1, addition);
+			int512_sum_long_posTop_negSum_posAddition (self, previousLevel-1, addition);
 
 		else {
 			for (int i = previousLevel-1; i < COUNT_LEVEL; i++)
@@ -119,16 +133,16 @@ void int512_sum_long (int512 * self, long addition) {
 
 			if (addition < 0) {
 
-				// @NOW_WE_HERE
+				addition += self->at[TOP_LEVEL];
 
+				int512_sum_long_posTop_negSum_negAddition (self, TOP_LEVEL, addition);
 			}
 
 			else {
 
 				addition = LONG_MAX - self->at[TOP_LEVEL] - addition;
 
-				int512_sum_long_topIsMinus_positiveAddition (self, TOP_LEVELi, addition);
-
+				int512_sum_long_posTop_negSum_posAddition (self, TOP_LEVEL, addition);
 			}
 
 		}
