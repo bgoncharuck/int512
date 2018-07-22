@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
-// you can change this adding abort() or else
+// you can change this by adding abort() or else
 #define throw(MSG) fprintf(stderr, "%s\n",MSG)
 
 #define TOP_LEVEL -1 + COUNT_LEVEL
@@ -105,7 +105,7 @@ static void int512_sum_long_posTop_negSum_posAddition \
 	}
 }
 
-int512_sum_long_negTop_posSum_posAddition \
+static void int512_sum_long_negTop_posSum_posAddition \
 	(int512 * self, int previousLevel, long addition) {
 
 	if (self->at[previousLevel-1] == 0) {
@@ -129,7 +129,7 @@ int512_sum_long_negTop_posSum_posAddition \
 
 }
 
-int512_sum_long_negTop_posSum_negAddition \
+static void int512_sum_long_negTop_posSum_negAddition \
 	(int512 * self, int previousLevel, long addition) {
 
 	if (self->at[previousLevel-1] > LONG_MIN) {
@@ -242,7 +242,5 @@ void int512_sum_long (int512 * self, long addition) {
 				// @TODO change to lower level solution
 			}
 		}
-
 	}
-
 }
