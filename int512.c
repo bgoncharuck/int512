@@ -24,7 +24,6 @@ int512 * int512_new() {
 	while (1 + size)
 		self->at[size--] = 0;
 
-
 	return self;
 }
 
@@ -59,6 +58,12 @@ long long int512_at (int512 * self, int i) {
 static void int512_sum_long_posTop_negSum_negAddition \
 	(int512 * self, int previousLevel, long addition) {
 
+	// example
+	// self->at[0]--;
+	// self->at[1] = LONG_MAX;
+	// self->at[2] = LONG_MAX;
+	// self->at[TOP] = LONG_MAX + addition;
+
 	if (self->at[previousLevel-1] > 0) {
 
 		self->at[previousLevel-1]--;
@@ -68,6 +73,11 @@ static void int512_sum_long_posTop_negSum_negAddition \
 
 		self->at[TOP_LEVEL] = LONG_MAX + addition;
 	}
+
+	// example
+	// if self->at[5] == 0
+	// 	if self->at[4] == 0....
+	// 		if self->at[TOP_LEVEL] = addition;
 
 	else if (self->at[previousLevel-1] == 0) {
 
@@ -82,6 +92,12 @@ static void int512_sum_long_posTop_negSum_negAddition \
 static void int512_sum_long_posTop_negSum_posAddition \
 	(int512 * self, int previousLevel, long addition) {
 
+	// example
+	// self->at[0]++;
+	// self->at[1] = 0;
+	// self->at[2] = 0;
+	// self->at[TOP] = -1 * addition;
+
 	if (self->at[previousLevel-1] < LONG_MAX) {
 
 		self->at[previousLevel-1]++;
@@ -91,6 +107,11 @@ static void int512_sum_long_posTop_negSum_posAddition \
 
 		self->at[TOP_LEVEL] = -1 * addition;
 	}
+
+	// example
+	// if self->at[5] == LONG_MAX
+	// 	if self->at[4] == LONG_MAX....
+	// 		if self->at[TOP_LEVEL] = LONG_MIN - addition;
 
 	else {
 		if (previousLevel != 1)
@@ -107,6 +128,8 @@ static void int512_sum_long_posTop_negSum_posAddition \
 
 static void int512_sum_long_negTop_posSum_posAddition \
 	(int512 * self, int previousLevel, long addition) {
+
+	// see posTop examples
 
 	if (self->at[previousLevel-1] == 0) {
 
@@ -131,6 +154,8 @@ static void int512_sum_long_negTop_posSum_posAddition \
 
 static void int512_sum_long_negTop_posSum_negAddition \
 	(int512 * self, int previousLevel, long addition) {
+
+	// see posTop examples
 
 	if (self->at[previousLevel-1] > LONG_MIN) {
 
@@ -164,11 +189,10 @@ void int512_sum_long (int512 * self, long addition) {
 		throw("null pointer in int512_sum_long()");
 		return;
 	}
-
-	if (addition == 0)
-		return;
-
-
+	//
+	if (addition == 0) return;
+	//
+	//
 	else if (self->at[TOP_LEVEL] >= 0) {
 
 		if ((self->at[TOP_LEVEL] + addition) > 0) {
@@ -201,12 +225,12 @@ void int512_sum_long (int512 * self, long addition) {
 			else {
 				int512_sum_long (self, addition-1);
 				int512_sum_long (self, 1);
-				// @TODO change to lower level solution
 			}
 		}
 
 	}
-
+	//
+	//
 	else if (self->at[TOP_LEVEL] < 0) {
 
 		if ((self->at[TOP_LEVEL] + addition) < 0) {
@@ -239,8 +263,68 @@ void int512_sum_long (int512 * self, long addition) {
 			else {
 				int512_sum_long (self, addition+1);
 				int512_sum_long (self, -1);
-				// @TODO change to lower level solution
 			}
 		}
 	}
+}
+
+void int512_difference_long (int512 * self, long subtrahend) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_difference_long()");
+		return;
+	}
+
+	if (subtrahend == 0) return;
+
+	// example in ascii char : -128 * (-1) != 128, because 127 is max
+	// solution is	x * (-1) == x - x*2 == 0 - x
+	long addition = 0; addition -= subtrahend;
+
+	int512_sum_long (self, addition);
+}
+
+int int512_compare_long (int512 * self, long toCompare) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_compare_long()");
+		return;
+	}
+
+	for (int i = 0; i < TOP_LEVEL; i++)
+		if (self->at[i] != 0)
+			return (self->at[i] > 0) ? 1 : -1;
+
+	if (self->at[TOP_LEVEL] > toCompare)
+		return 1;
+
+	else if (self->at[TOP_LEVEL] < toCompare)
+		return -1;
+
+	return 0;
+}
+
+int int512_compare_int512 (int512 * first, int512 * second) {
+
+	if (first == NULL || second == NULL) {
+		throw("null pointer in int512_compare_int512()");
+		return;
+	}
+
+	for (int i = 0; i < COUNT_LEVEL; i++)
+		if (first->at[i] != 0 && second->at[i] == 0)
+			return (first->at[i] > 0) ? 1 : -1;
+
+		else if (second->at[i] != 0 && first->at[i] == 0)
+			return (second->at[i] > 0) ? -1 : 1;
+
+		else if (first->at[i] != 0 && second->at[i] != 0)
+			return (first->at[i] > second->at[i]) ? 1 : -1;
+
+	return 0;
+}
+
+void int512_sum_int512 (int512 * first, int512 * second) {
+
+	// @NOW_WE_HERE
 }
