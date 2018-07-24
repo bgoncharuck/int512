@@ -354,7 +354,84 @@ int int512_compare_int512 (int512 * first, int512 * second) {
 	return 0;
 }
 
+void int512_copy_int512 (int512 * to, int512 * from) {
+
+	if (to == NULL || from == NULL) {
+		throw("null pointer in int512_copy_int512()");
+		return;
+	}
+
+	for (int i = 0; i < COUNT_LEVEL; i++)
+		to->at[i] = from->at[i];
+}
+
+int512 * int512_copy_new (int512 * from) {
+
+	if (from == NULL) {
+		throw("null pointer in int512_copy_new()");
+		return NULL;
+	}
+
+	int512 * to = int512_new();
+
+	int512_copy_int512 (to, from);
+
+	return to;
+}
+
 void int512_sum_int512 (int512 * first, int512 * second) {
 
-	// @NOW_WE_HER
+	if (first == NULL || second == NULL) {
+		throw("null pointer in int512_sum_int512()");
+		return;
+	}
+
+	for (int i = TOP_LEVEL; i >= 0; i--)
+		int512_sum_long_byLevel (first, i, second->at[i]);
+}
+
+int512 * int512_sum_new (int512 * first, int512 * second) {
+
+	if (first == NULL || second == NULL) {
+		throw("null pointer in int512_sum_new()");
+		return NULL;
+	}
+
+	int512 * self = int512_new();
+
+	int512_sum_int512 (self, first);
+	int512_sum_int512 (self, second);
+
+	return self;
+}
+
+void int512_difference_int512 (int512 * first, int512 * second) {
+
+	if (first == NULL || second == NULL) {
+		throw("null pointer in int512_difference_int512()");
+		return;
+	}
+
+	// see difference for long
+	long temporary = 0;
+
+	for (int i = TOP_LEVEL; i >= 0; i--) {
+		temporary -= second->at[i];
+		int512_sum_long_byLevel (first, i, temporary);
+		temporary = 0;
+	}
+}
+
+int512 * int512_subtrahend_long (long minued, int512 * subtrahend) {
+
+	if (subtrahend == NULL) {
+		throw("null pointer in int512_subtrahend_long()");
+		return NULL;
+	}
+
+	int512 * self = int512_new();
+	int512_sum_long (self, minued);
+	int512_difference_int512 (self, subtrahend);
+
+	return self;
 }

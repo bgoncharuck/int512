@@ -25,4 +25,12 @@ int int512_compare_long (int512 * self, long toCompare) ;
 
 int int512_compare_int512 (int512 * first, int512 * second) ;
 
+void int512_copy_int512 (int512 * to, int512 * from) ;
+
+int512 * int512_copy_new (int512 * from) ;
+
 void int512_sum_int512 (int512 * first, int512 * second) ;
+
+int512 * int512_sum_new (int512 * first, int512 * second) ;
+
+int512 * int512_subtrahend_long (long minued, int512 * subtrahend) ;
