@@ -15,6 +15,8 @@ void int512_setat (int512 * self, int i, long val) ;
 
 void int512_print (int512 * self) ;
 
+void int512_sum_long_byLevel (int512 * self, int level, long addition) ;
+
 void int512_sum_long (int512 * self, long addition) ;
 
 void int512_difference_long (int512 * self, long subtrahend) ;

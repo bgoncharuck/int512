@@ -24,12 +24,24 @@ int main (void) {
 	printf ("\n\n");
 	int512_print (b);
 	printf ("\n\n");
-	int512_sum_long (a, 1);
+	int512_sum_long (a, 2);
 	int512_print (a);
 	printf ("\n\n");
-	int512_sum_long (b, -1);
+	int512_sum_long (b, -2);
 	int512_print (b);
 
+	printf ("\n\nLOLKEK-LOLKEK\n\n");
+	int512_sum_long (c, LONG_MAX);
+	int512_print (c);
+	int512_sum_long (c, LONG_MAX);
+	int512_print (c);
+
+
+	int512_free (a);
+	int512_free (b);
+	int512_free (c);
+	int512_free (d);
+	int512_free (e);
 
 	return EXIT_SUCCESS;
 }
