@@ -38,8 +38,7 @@ void int512_free (int512 * self) {
 	free(self);
 }
 
-
-long long int512_at (int512 * self, int i) {
+long int512_at (int512 * self, int i) {
 
 	if (self == NULL) {
 		throw("null pointer in int512_at()");
@@ -53,6 +52,35 @@ long long int512_at (int512 * self, int i) {
 	}
 
 	return self->at[i];
+}
+
+void int512_setat (int512 * self, int i, long val) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_setat()");
+		return;
+	}
+
+
+	if (i >= COUNT_LEVEL || i < 0) {
+		throw("out of bounders in int512_setat()");
+		return;
+	}
+
+	self->at[i] = val;
+}
+
+void int512_print (int512 * self) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_print()");
+		return;
+	}
+
+	for (int i = 0; i <= TOP_LEVEL; i++)
+		printf ("_%ld", self->at[i]);
+
+	printf("\n");
 }
 
 static void int512_sum_long_posTop_negSum_negAddition \
@@ -268,6 +296,8 @@ void int512_sum_long (int512 * self, long addition) {
 	}
 }
 
+// void int512_sum_long (int512 * self, long addition)
+
 void int512_difference_long (int512 * self, long subtrahend) {
 
 	if (self == NULL) {
@@ -288,7 +318,7 @@ int int512_compare_long (int512 * self, long toCompare) {
 
 	if (self == NULL) {
 		throw("null pointer in int512_compare_long()");
-		return;
+		return 0;
 	}
 
 	for (int i = 0; i < TOP_LEVEL; i++)
@@ -308,7 +338,7 @@ int int512_compare_int512 (int512 * first, int512 * second) {
 
 	if (first == NULL || second == NULL) {
 		throw("null pointer in int512_compare_int512()");
-		return;
+		return 0;
 	}
 
 	for (int i = 0; i < COUNT_LEVEL; i++)
@@ -326,5 +356,5 @@ int int512_compare_int512 (int512 * first, int512 * second) {
 
 void int512_sum_int512 (int512 * first, int512 * second) {
 
-	// @NOW_WE_HERE
+	// @NOW_WE_HER
 }
