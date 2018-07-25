@@ -119,7 +119,7 @@ static void int512_sum_long_posTop_negSum_negAddition \
 					// |-2|5|-3|
 					// 2. |1| = 5 -1 -9 = -5; |0|++ = -1
 					// |-1|-5|-3|
-					for (int j = TOP_LEVEL; j > fromLevel; j--) {
+					for (int j = i; j > fromLevel; j--) {
 						self->at[j] += \
 						((self->at[j]>0) ? -1 : 0) + LONG_MIN;
 
