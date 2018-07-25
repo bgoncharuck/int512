@@ -87,10 +87,10 @@ static void int512_sum_long_posTop_negSum_negAddition \
 		// _0_1_0_0_-2_4_7
 	if (self->at[previousLevel-1] > 0) {
 
-		// _0_0_0_0_-2_4_7
+		// _0_0_0_0_-2_4_7 reduce current level by one
 		self->at[previousLevel-1]--;
 
-		// _0_0_9_9_-2_4_7
+		// _0_0_9_9_-2_4_7 change all levels till fromLevel to MAX val
 		for (int i = previousLevel; i < fromLevel; i++)
 			self->at[i] = LONG_MAX;
 
@@ -104,17 +104,17 @@ static void int512_sum_long_posTop_negSum_negAddition \
 			int512_sum_long_posTop_negSum_negAddition (self, previousLevel-1, fromLevel, addition);
 
 		else {
-			// _0_0_0_0_-2_4_7
+			// _0_0_0_0_-2_4_7 all lower levels are zeroes, so we just paste addition in current level
 			self->at[fromLevel] = addition;
 
 			for (int i = TOP_LEVEL; i > fromLevel; i--)
 
-				if (self->at[i] > 0) {
+				if (self->at[i] > 0) { // if there any positive numbers in higher levels we add it
 					// _0_0_0_0_-1_-5_-3
 					//
-					// |0|1|2|
-					//|-2|4|7|
-					//
+					// |0|1|2| levels
+					//|-2|4|7| values
+					// level += -1 if > 0 + MIN value for each level from top till fromLevel
 					// 1. |2| = 7 -1 -9 = -3; |1|++ = 5
 					// |-2|5|-3|
 					// 2. |1| = 5 -1 -9 = -5; |0|++ = -1
