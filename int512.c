@@ -158,8 +158,12 @@ static void int512_sum_long_posTop_negSum_posAddition \
 
 		else {
 			// 9_9_9_9_-2_4_5 now we must create our own "out of bounders"
-
-
+			// Pseudo cod
+				// In this case we are know for sure that it is are special case
+			// Algorithm: // FirstNumber + SecondNumber > Max_Max_Number
+			// toRemember = Max_Max_Number - FirstNumber 
+			// toRemember2 = SecondNumber + toRemember
+			// FinalyNumber = Min_Maqx_Number - toRemember2
 		}
 
 	}
