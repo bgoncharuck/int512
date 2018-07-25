@@ -33,4 +33,10 @@ void int512_sum_int512 (int512 * first, int512 * second) ;
 
 int512 * int512_sum_new (int512 * first, int512 * second) ;
 
+void int512_difference_int512 (int512 * first, int512 * second) ;
+
 int512 * int512_subtrahend_long (long minued, int512 * subtrahend) ;
+
+char * int512_toBase (int512 * self, unsigned base);
+
+int512 * int512_fromBase (char * str, unsigned base);

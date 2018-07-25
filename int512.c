@@ -13,7 +13,6 @@ struct __int512 {
 	long at[COUNT_LEVEL];
 };
 
-
 int512 * int512_new() {
 
 	int512 * self = malloc (sizeof(int512));
@@ -26,7 +25,6 @@ int512 * int512_new() {
 
 	return self;
 }
-
 
 void int512_free (int512 * self) {
 
@@ -84,127 +82,68 @@ void int512_print (int512 * self) {
 }
 
 static void int512_sum_long_posTop_negSum_negAddition \
-	(int512 * self, int previousLevel, int topLevel, long addition) {
+	(int512 * self, int previousLevel, int fromLevel, long addition) {
 
-	// example
-	// self->at[0]--;
-	// self->at[1] = LONG_MAX;
-	// self->at[2] = LONG_MAX;
-	// self->at[TOP] = LONG_MAX + addition;
-
+		// _0_1_0_0_-2_4_7
 	if (self->at[previousLevel-1] > 0) {
 
+		// _0_0_0_0_-2_4_7
 		self->at[previousLevel-1]--;
 
-		for (int i = previousLevel; i < topLevel; i++)
+		// _0_0_9_9_-2_4_7
+		for (int i = previousLevel; i < fromLevel; i++)
 			self->at[i] = LONG_MAX;
 
-		self->at[topLevel] = LONG_MAX + addition;
+		// _0_0_9_9_8_4_7
+		self->at[fromLevel] = LONG_MAX + addition + 1;
 	}
-
-	// example
-	// if self->at[5] == 0
-	// 	if self->at[4] == 0....
-	// 		if self->at[topLevel] = addition;
 
 	else if (self->at[previousLevel-1] == 0) {
 
 		if (previousLevel != 1)
-			int512_sum_long_posTop_negSum_negAddition (self, previousLevel-1, topLevel, addition);
+			int512_sum_long_posTop_negSum_negAddition (self, previousLevel-1, fromLevel, addition);
 
-		else
-			self->at[topLevel] = addition;
+		else {
+			// _0_0_0_0_-2_4_7
+			self->at[fromLevel] = addition;
+
+			for (int i = TOP_LEVEL; i > fromLevel; i--)
+
+				if (self->at[i] > 0) {
+					// _0_0_0_0_-1_-5_-3
+					//
+					// |0|1|2|
+					//|-2|4|7|
+					//
+					// 1. |2| = 7 -1 -9 = -3; |1|++ = 5
+					// |-2|5|-3|
+					// 2. |1| = 5 -1 -9 = -5; |0|++ = -1
+					// |-1|-5|-3|
+					for (int j = TOP_LEVEL; j > fromLevel; j--) {
+						self->at[j] += \
+						((self->at[j]>0) ? -1 : 0) + LONG_MIN;
+
+						self->at[j-1]++;
+					}
+					return;
+				}
+		}
 	}
 }
 
 static void int512_sum_long_posTop_negSum_posAddition \
-	(int512 * self, int previousLevel, int topLevel, long addition) {
+	(int512 * self, int previousLevel, int fromLevel, long addition) {
 
-	// example
-	// self->at[0]++;
-	// self->at[1] = 0;
-	// self->at[2] = 0;
-	// self->at[TOP] = -1 * addition;
-
-	if (self->at[previousLevel-1] < LONG_MAX) {
-
-		self->at[previousLevel-1]++;
-
-		for (int i = previousLevel; i < topLevel; i++)
-			self->at[i] = 0;
-
-		self->at[topLevel] = -1 * addition;
-	}
-
-	// example
-	// if self->at[5] == LONG_MAX
-	// 	if self->at[4] == LONG_MAX....
-	// 		if self->at[topLevel] = LONG_MIN - addition;
-
-	else {
-		if (previousLevel != 1)
-			int512_sum_long_posTop_negSum_posAddition (self, previousLevel-1, topLevel, addition);
-
-		else {
-			for (int i = previousLevel-1; i < topLevel; i++)
-				self->at[i] = LONG_MIN;
-
-			self->at[topLevel] = LONG_MIN - addition;
-		}
-	}
 }
 
 static void int512_sum_long_negTop_posSum_posAddition \
-	(int512 * self, int previousLevel, int topLevel, long addition) {
+	(int512 * self, int previousLevel, int fromLevel, long addition) {
 
-	// see posTop examples
-
-	if (self->at[previousLevel-1] == 0) {
-
-		if (previousLevel != 1)
-			int512_sum_long_negTop_posSum_posAddition (self, previousLevel-1, topLevel, addition);
-
-		else
-			self->at[topLevel] = addition;
-	}
-
-	else if (self->at[previousLevel-1] < 0) {
-
-		self->at[previousLevel-1]++;
-
-		for (int i = previousLevel; i < topLevel; i++)
-			self->at[i] = LONG_MIN;
-
-		self->at[topLevel] = LONG_MIN + addition;
-	}
 }
 
 static void int512_sum_long_negTop_posSum_negAddition \
-	(int512 * self, int previousLevel, int topLevel, long addition) {
+	(int512 * self, int previousLevel, int fromLevel, long addition) {
 
-	// see posTop examples
-
-	if (self->at[previousLevel-1] > LONG_MIN) {
-
-		self->at[previousLevel-1]--;
-
-		for (int i = previousLevel; i < topLevel; i++)
-			self->at[i] = 0;
-
-		self->at[topLevel] = LONG_MIN + addition;
-	}
-
-	else {
-		if (previousLevel != 1)
-			int512_sum_long_negTop_posSum_negAddition (self, previousLevel-1, topLevel, addition);
-
-		else {
-			for (int i = previousLevel-1; i < topLevel; i++)
-				self->at[i] = LONG_MAX;
-
-			self->at[topLevel] = LONG_MAX + addition;
-		}
-	}
 }
 
 void int512_sum_long_byLevel (int512 * self, int level, long addition) {
@@ -290,7 +229,6 @@ void int512_sum_long_byLevel (int512 * self, int level, long addition) {
 			}
 		}
 	}
-
 }
 
 void int512_sum_long (int512 * self, long addition) {
@@ -434,4 +372,14 @@ int512 * int512_subtrahend_long (long minued, int512 * subtrahend) {
 	int512_difference_int512 (self, subtrahend);
 
 	return self;
+}
+
+char * int512_toBase (int512 * self, unsigned base) {
+
+	return NULL;
+}
+
+int512 * int512_fromBase (char * str, unsigned base) {
+
+	return NULL;
 }
