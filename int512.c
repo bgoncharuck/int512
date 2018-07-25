@@ -84,7 +84,7 @@ void int512_print (int512 * self) {
 static void int512_sum_long_posTop_negSum_negAddition \
 	(int512 * self, int previousLevel, int fromLevel, long addition) {
 
-		// _0_1_0_0_-2_4_7
+	// _0_1_0_0_-2_4_7
 	if (self->at[previousLevel-1] > 0) {
 
 		// _0_0_0_0_-2_4_7 reduce current level by one
@@ -112,9 +112,13 @@ static void int512_sum_long_posTop_negSum_negAddition \
 				if (self->at[i] > 0) { // if there any positive numbers in higher levels we add it
 					// _0_0_0_0_-1_-5_-3
 					//
-					// |0|1|2| levels
-					//|-2|4|7| values
-					// level += -1 if > 0 + MIN value for each level from top till fromLevel
+					//  |0|1|2| levels
+					// |-2|4|7| values
+					//
+					// level += -1 if > 0 + MIN value
+					// then we increase lower level by one
+					// and do so for each level from top till fromLevel
+					//
 					// 1. |2| = 7 -1 -9 = -3; |1|++ = 5
 					// |-2|5|-3|
 					// 2. |1| = 5 -1 -9 = -5; |0|++ = -1
@@ -134,15 +138,43 @@ static void int512_sum_long_posTop_negSum_negAddition \
 static void int512_sum_long_posTop_negSum_posAddition \
 	(int512 * self, int previousLevel, int fromLevel, long addition) {
 
+	// 0_3_9_9_-2_4_5
+	if (self->at[previousLevel-1] < LONG_MAX) {
+
+		// 0_4_9_9_-2_4_5 increase current level by one
+		self->at[previousLevel-1]++;
+
+		// 0_4_0_0_-2_4_5 change all levels till fromLevel to zero
+		for (int i = previousLevel; i < fromLevel; i++)
+			self->at[i] = 0;
+
+		// 0_4_0_0_2_4_5
+		self->at[fromLevel] = -1 * addition;
+	}
+
+	else {
+		if (previousLevel != 1)
+			int512_sum_long_posTop_negSum_posAddition (self, previousLevel-1, fromLevel, addition);
+
+		else {
+			// 9_9_9_9_-2_4_5 now we must create our own "out of bounders"
+			
+
+		}
+
+	}
+
 }
 
 static void int512_sum_long_negTop_posSum_posAddition \
 	(int512 * self, int previousLevel, int fromLevel, long addition) {
 
+
 }
 
 static void int512_sum_long_negTop_posSum_negAddition \
 	(int512 * self, int previousLevel, int fromLevel, long addition) {
+
 
 }
 
