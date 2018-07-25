@@ -112,16 +112,16 @@ static void int512_sum_long_posTop_negSum_negAddition \
 				if (self->at[i] > 0) { // if there any positive numbers in higher levels we add it
 					// _0_0_0_0_-1_-5_-3
 					//
-					//  |0|1|2| levels
+					//  |4|5|6| levels
 					// |-2|4|7| values
 					//
 					// level += -1 if > 0 + MIN value
 					// then we increase lower level by one
 					// and do so for each level from top till fromLevel
 					//
-					// 1. |2| = 7 -1 -9 = -3; |1|++ = 5
+					// 1. |6| = 7 -1 -9 = -3; |5|++ = 5
 					// |-2|5|-3|
-					// 2. |1| = 5 -1 -9 = -5; |0|++ = -1
+					// 2. |5| = 5 -1 -9 = -5; |4|++ = -1
 					// |-1|-5|-3|
 					for (int j = i; j > fromLevel; j--) {
 						self->at[j] += \
@@ -158,7 +158,7 @@ static void int512_sum_long_posTop_negSum_posAddition \
 
 		else {
 			// 9_9_9_9_-2_4_5 now we must create our own "out of bounders"
-			
+
 
 		}
 
