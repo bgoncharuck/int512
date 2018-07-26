@@ -158,12 +158,17 @@ static void int512_sum_long_posTop_negSum_posAddition \
 
 		else {
 			// 9_9_9_9_-2_4_5 now we must create our own "out of bounders"
-			// Pseudo cod
-				// In this case we are know for sure that it is are special case
-			// Algorithm: // FirstNumber + SecondNumber > Max_Max_Number
-			// toRemember = Max_Max_Number - FirstNumber 
-			// toRemember2 = SecondNumber + toRemember
-			// FinalyNumber = Min_Maqx_Number - toRemember2
+
+			// -9_-9_-9_-9_-2_4_5
+			for (int i = 0; i < fromLevel; i++)
+				self->at[i] = LONG_MIN;
+
+			// -9_-9_-9_-9_2_4_5
+			self->at[fromLevel] = -1 * addition;
+
+			// -9_-9_-9_-9_-7_-5_-4
+			for (int i = fromLevel; i <= TOP_LEVEL; i++)
+				self->at[i] += LONG_MIN;
 		}
 
 	}
@@ -173,6 +178,11 @@ static void int512_sum_long_posTop_negSum_posAddition \
 static void int512_sum_long_negTop_posSum_posAddition \
 	(int512 * self, int previousLevel, int fromLevel, long addition) {
 
+	// 0_-3_0_0_-5_-3_-4
+	if (self->at[previousLevel-1] < 0) {
+
+
+	}
 
 }
 
