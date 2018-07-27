@@ -491,28 +491,6 @@ int512 * int512_subtrahend_long (long minued, int512 * subtrahend) {
 	return self;
 }
 
-void int512_set_min (int512 * self) {
-
-	if (self == NULL) {
-		throw("null pointer in int512_set_min()");
-		return;
-	}
-
-	for (int i = TOP_LEVEL; i >= 0; i--)
-		self->at = LONG_MIN;
-}
-
-void int512_set_max (int512 * self) {
-
-	if (self == NULL) {
-		throw("null pointer in int512_set_max()");
-		return;
-	}
-
-	for (int i = TOP_LEVEL; i >= 0; i--)
-		self->at = LONG_MAX;
-}
-
 void int512_set_value (int512 * self, long value) {
 
 	if (self == NULL) {
@@ -522,6 +500,16 @@ void int512_set_value (int512 * self, long value) {
 
 	for (int i = TOP_LEVEL; i >= 0; i--)
 		self->at = value;
+}
+
+void int512_set_min (int512 * self) {
+
+	int512_set_value (self, LONG_MIN);
+}
+
+void int512_set_max (int512 * self) {
+
+	int512_set_value (self, LONG_MAX);
 }
 
 char * int512_toBase (int512 * self, unsigned base) {
