@@ -30,8 +30,6 @@ void int512_free (int512 * self) {
 		return;
 	}
 
-	free(self->at);
-
 	free(self);
 }
 
