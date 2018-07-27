@@ -11,7 +11,7 @@ void int512_free (int512 * self) ;
 
 long int512_at (int512 * self, int i) ;
 
-void int512_setat (int512 * self, int i, long val) ;
+void int512_set_at (int512 * self, int i, long value) ;
 
 void int512_print (int512 * self) ;
 
@@ -36,6 +36,12 @@ int512 * int512_sum_new (int512 * first, int512 * second) ;
 void int512_difference_int512 (int512 * first, int512 * second) ;
 
 int512 * int512_subtrahend_long (long minued, int512 * subtrahend) ;
+
+void int512_set_min (int512 * self) ;
+
+void int512_set_max (int512 * self) ;
+
+void int512_set_value (int512 * self, long value) ;
 
 char * int512_toBase (int512 * self, unsigned base);
 
