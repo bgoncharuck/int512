@@ -18,10 +18,7 @@ int512 * int512_new() {
 	int512 * self = malloc (sizeof(int512));
 	if (self == NULL) abort();
 
-	int size = TOP_LEVEL;
-
-	while (1 + size)
-		self->at[size--] = 0;
+	int512_set_value (self, 0);
 
 	return self;
 }
@@ -32,6 +29,8 @@ void int512_free (int512 * self) {
 		throw("null pointer in int512_free()");
 		return;
 	}
+
+	free(self->at);
 
 	free(self);
 }
