@@ -496,7 +496,7 @@ void int512_set_value (int512 * self, long value) {
 	}
 
 	for (int i = TOP_LEVEL; i >= 0; i--)
-		self->at = value;
+		self->at[i] = value;
 }
 
 void int512_set_min (int512 * self) {
