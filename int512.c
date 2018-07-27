@@ -178,17 +178,93 @@ static void int512_sum_long_posTop_negSum_posAddition \
 static void int512_sum_long_negTop_posSum_posAddition \
 	(int512 * self, int previousLevel, int fromLevel, long addition) {
 
-	// 0_-3_0_0_-5_-3_-4
+	// 0_-3_0_0_3_-3_-4
 	if (self->at[previousLevel-1] < 0) {
 
+		// 0_-2_0_0_3_-3_-4
+		self->at[previousLevel-1]++;
 
+		// 0_-2_-9_-9_3_-3_-4
+		for (int i = previousLevel; i < fromLevel; i++)
+			self->at[i] = LONG_MIN;
+
+		// 0_-2_-9_-9_-6_-3_-4
+		self->at[fromLevel] = LONG_MIN + addition;
 	}
 
+	else {
+		if (previousLevel != 1)
+			int512_sum_long_negTop_posSum_posAddition (self, previousLevel-1, fromLevel, addition);
+
+		else {
+			// 0_0_0_3_-3_-4 all lower levels are zeroes, so we just paste addition in current level
+			self->at[fromLevel] = addition;
+
+			for (int i = TOP_LEVEL; i > fromLevel; i--)
+
+				if (self->at[i] < 0) {
+
+					// _0_0_0_2_6_6
+					//
+					// |3|4 |5 |
+					// |3|-3|-4|
+					//
+					// level += 1 if < 0 + MAX values
+					// then we decreace lower level by one
+					// and do so for each level from top till fromLevel
+					//
+					// 1. |5| = -4 + 1 + 9 = 6; |4|-- = -4;
+					// |3|-4|6|
+					// 2. |4| = -4 + 1 + 9 = 6; |3|-- = 2;
+					// |2|6|6|
+					for (int j = i; j > fromLevel; j--) {
+						self->at[j] += \
+						((self->at[j]<0) ? 1 : 0) + LONG_MAX;
+
+						self->at[j-1]--;
+					}
+					return;
+				}
+		}
+	}
 }
 
 static void int512_sum_long_negTop_posSum_negAddition \
 	(int512 * self, int previousLevel, int fromLevel, long addition) {
 
+	// _0_-2_-9_-9_3_-4_-2
+	if (self->at[previousLevel-1] > LONG_MIN) {
+
+		// _0_-3_-9_-9_3_-4_-2
+		self->at[previousLevel-1]--;
+
+		// _0_-3_0_0_3_-4_-2
+		for (int i = previousLevel; i < fromLevel; i++)
+			self->at[i] = 0;
+
+		// _0_-3_0_0_-3_-4_-2
+		self->at[fromLevel] = -1 * addition;
+	}
+
+	else {
+		if (previousLevel != 1)
+			int512_sum_long_negTop_posSum_negAddition (self, previousLevel-1, fromLevel, addition);
+
+		else {
+			// _-9_-9_-9_3_-4_-2 let's create our own "out of bounders"
+
+			// _9_9_9_3_-4_-2
+			for (int i = 0; i < fromLevel; i++)
+				self->at[i] = LONG_MAX;
+
+			// _9_9_9_-3_-4_-2
+			self->at[fromLevel] = -1 * addition;
+
+			// _9_9_9_6_5_7
+			for (int i = fromLevel; i <= TOP_LEVEL; i++)
+				self->at[i] += LONG_MAX;
+		}
+	}
 
 }
 
@@ -258,7 +334,7 @@ void int512_sum_long_byLevel (int512 * self, int level, long addition) {
 
 			else {
 
-				addition = LONG_MIN + self->at[level] + addition;
+				addition = LONG_MIN - self->at[level] - addition;
 
 				int512_sum_long_negTop_posSum_negAddition (self, level, level, addition);
 			}
