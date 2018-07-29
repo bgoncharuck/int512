@@ -1,3 +1,5 @@
+#pragma once
+
 typedef struct __int512 int512;
 
 #define BIGINT_512_IN_32LONG 16

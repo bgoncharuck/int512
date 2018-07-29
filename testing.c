@@ -14,11 +14,8 @@ int main (void) {
 	int512 * d = int512_new();
 	int512 * e = int512_new();
 
-	for (int i = 0; i < COUNT_LEVEL; i++)
-		int512_setat (a, i, LONG_MAX);
-
-	for (int i = 0; i < COUNT_LEVEL; i++)
-		int512_setat (b, i, LONG_MIN);
+	int512_set_max (a);
+	int512_set_min (b);
 
 	int512_print (a);
 	printf ("\n\n");

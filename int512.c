@@ -9,6 +9,23 @@
 
 #define TOP_LEVEL -1 + COUNT_LEVEL
 
+// @staff
+
+long pow2 (int power) {
+	long t = 1; while (power--) t *= 2;
+	return t;
+}
+
+int pow2Bound (long num, int bound) {
+	int t = (bound > 0) ? 1 : 0;
+	if (num >= 0)
+		while ( (num = num >> 1) ) t++;
+	else
+		while ( (num /= 2) ) t++;
+	return t;
+}
+
+// @INT512
 struct __int512 {
 	long at[COUNT_LEVEL];
 };
@@ -508,6 +525,45 @@ void int512_set_max (int512 * self) {
 
 	int512_set_value (self, LONG_MAX);
 }
+
+// @INT512_SHIFT
+
+void int512_shift_left (int512 * self) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_shift_left()");
+		return;
+	}
+}
+
+void int512_shift_right (int512 * self) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_shift_right()");
+		return;
+	}
+}
+
+// @INT512_MULT
+
+/*
+long int512_toValue (int512 * self) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_tovalue()");
+		return LONG_MIN;
+	}
+
+	long temporary = self->at[0];
+
+	for (int i = 0; i < TOP_LEVEL; i++) {
+		if (self->at[i] != 0)
+			if (temporary != self->at[i])
+	}
+}
+*/
+
+// @INT512_BASE
 
 char * int512_toBase (int512 * self, unsigned base) {
 
