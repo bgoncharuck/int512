@@ -489,24 +489,15 @@ int512 * int512_subtrahend_long (long minued, int512 * subtrahend) {
 	return self;
 }
 
-static void int512_product_long_posTop_posMult \
+static void int512_product_long_operation \
 	(int512 * self, int previousLevel, int fromLevel, long multiplier) {
 
-}
+	// i will use int512 as temp values array (not in usual way)
+	int512 * sumArray[COUNT_LEVEL];
+	for (int i = 0; i <= TOP_LEVEL; i++)
+		sumArray[i] = int512_new();
 
-static void int512_product_long_posTop_negMult \
-	(int512 * self, int previousLevel, int fromLevel, long multiplier) {
-
-}
-
-static void int512_product_long_negTop_posMult \
-	(int512 * self, int previousLevel, int fromLevel, long multiplier) {
-
-}
-
-static void int512_product_long_negTop_negMult \
-	(int512 * self, int previousLevel, int fromLevel, long multiplier) {
-
+	
 }
 
 void int512_product_long_byLevel (int512 * self, int level, long multiplier) {
@@ -527,12 +518,10 @@ void int512_product_long_byLevel (int512 * self, int level, long multiplier) {
 	else if (self->at[level] > 0) {
 		if (multiplier > 0) {
 
-			int512_product_long_posTop_posMult (self, level, level, multiplier);
 
 		}
 		else {
 
-			int512_product_long_posTop_negMult (self, level, level, multiplier);
 
 		}
 	}
@@ -540,12 +529,10 @@ void int512_product_long_byLevel (int512 * self, int level, long multiplier) {
 	else if (self->at[level] < 0) {
 		if (multiplier > 0) {
 
-			int512_product_long_negTop_posMult (self, level, level, multiplier);
 
 		}
 		else {
 
-			int512_product_long_negTop_negMult (self, level, level, multiplier);
 
 		}
 	}
