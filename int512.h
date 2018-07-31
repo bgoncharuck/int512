@@ -2,7 +2,7 @@
 
 typedef struct __int512 int512;
 
-#define BIGINT_512_IN_32LONG 16
+#define BIGINT_512_IN_32LONG 16 /*first bit in all long for sign*/ + 1
 
 // must be less than int bounders
 #define COUNT_LEVEL BIGINT_512_IN_32LONG
@@ -48,6 +48,8 @@ void int512_set_value_fromLevel (int512 * self, int level, long value) ;
 void int512_set_value (int512 * self, long value) ;
 
 int int512_fromLevel_value (int512 * self, int level, long value) ;
+
+int int512_nullEntrance (int512 * self, int fromLevel) {
 
 char * int512_toBase (int512 * self, unsigned base);
 

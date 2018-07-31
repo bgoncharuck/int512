@@ -492,12 +492,12 @@ int512 * int512_subtrahend_long (long minued, int512 * subtrahend) {
 static void int512_product_long_operation \
 	(int512 * self, int previousLevel, int fromLevel, long multiplier) {
 
-	// i will use int512 as temp values array (not in usual way)
-	int512 * sumArray[COUNT_LEVEL];
-	for (int i = 0; i <= TOP_LEVEL; i++)
-		sumArray[i] = int512_new();
 
-	
+	register long levelOutFirst = 0, levelOutSecond = 0;
+
+
+
+
 }
 
 void int512_product_long_byLevel (int512 * self, int level, long multiplier) {
@@ -538,6 +538,14 @@ void int512_product_long_byLevel (int512 * self, int level, long multiplier) {
 	}
 }
 
+void int512_product_int512 (int512 * base, int512 * multiplier) {
+
+	// i will use int512 as temp values array (not in usual way)
+	// int512 * sumArray[fromLevel + 1];
+	// for (int i = 0; i <= fromLevel; i++)
+		// sumArray[i] = int512_new();
+}
+
 void int512_set_value_fromLevel (int512 * self, int level, long value) {
 
 	if (self == NULL) {
@@ -564,18 +572,18 @@ void int512_set_max (int512 * self) {
 	int512_set_value (self, LONG_MAX);
 }
 
-int int512_fromLevel_value (int512 * self, int level, long value) {
+int int512_fromLevel_value (int512 * self, int fromLevel, long value) {
 
 	if (self == NULL) {
-		throw("null pointer in int512_levels_value()");
+		throw("null pointer in int512_fromLevel_value()");
 		return;
 	}
 
 	if (value != 0) {
-		for (int i = level; i >= 0; i--)
+		for (int i = fromLevel; i >= 0; i--)
 
 			if (self->at[i] == 0) {
-				if (i == level) return 0;
+				if (i == fromLevel) return 0;
 
 				else if (self->at[i+1] == 0 && self->at[i] != 0)
 					return 0;
@@ -585,12 +593,26 @@ int int512_fromLevel_value (int512 * self, int level, long value) {
 				return 0;
 	}
 	else {
-		for (int i = level; i >= 0; i--)
+		for (int i = fromLevel; i >= 0; i--)
 			if (self->at[i] != 0)
 				return 0;
 	}
 
 	return 1;
+}
+
+int int512_nullEntrance (int512 * self, int fromLevel) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_nullEntrance()");
+		return;
+	}
+
+	for (int i = fromLevel; i >= 0; i--)
+		if (self->at[i] != 0)
+			return i;
+
+	return -1;
 }
 
 char * int512_toBase (int512 * self, unsigned base) {
