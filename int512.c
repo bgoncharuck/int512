@@ -489,15 +489,56 @@ int512 * int512_subtrahend_long (long minued, int512 * subtrahend) {
 	return self;
 }
 
-void int512_set_value (int512 * self, long value) {
+void
+
+void int512_product_long_byLevel (int512 * self, int level, long multiplier) {
 
 	if (self == NULL) {
-		throw("null pointer in int512_set_value()");
+		throw("null pointer in int512_product_long()");
 		return;
 	}
 
-	for (int i = TOP_LEVEL; i >= 0; i--)
+	if (multiplier == 0) {
+		int512_set_value_fromLevel (self, level, 0);
+		return;
+	}
+
+	else if (int512_fromLevel_value (self, level, 0))
+		return;
+
+	else if (self->at[level] > 0) {
+		if (multiplier > 0) {
+
+		}
+		else {
+
+		}
+	}
+
+	else if (self->at[level] < 0) {
+		if (multiplier > 0) {
+
+		}
+		else {
+
+		}
+	}
+}
+
+void int512_set_value_fromLevel (int512 * self, int level, long value) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_set_value_fromLevel()");
+		return;
+	}
+
+	for (int i = level; i >= 0; i--)
 		self->at[i] = value;
+}
+
+void int512_set_value (int512 * self, long value) {
+
+	int512_set_value_fromLevel (self, TOP_LEVEL, value);
 }
 
 void int512_set_min (int512 * self) {
@@ -508,6 +549,35 @@ void int512_set_min (int512 * self) {
 void int512_set_max (int512 * self) {
 
 	int512_set_value (self, LONG_MAX);
+}
+
+int int512_fromLevel_value (int512 * self, int level, long value) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_levels_value()");
+		return;
+	}
+
+	if (value != 0) {
+		for (int i = level; i >= 0; i--)
+
+			if (self->at[i] == 0) {
+				if (i == level) return 0;
+
+				else if (self->at[i+1] == 0 && self->at[i] != 0)
+					return 0;
+			}
+
+			else if (self->at[i] != value)
+				return 0;
+	}
+	else {
+		for (int i = level; i >= 0; i--)
+			if (self->at[i] != 0)
+				return 0;
+	}
+
+	return 1;
 }
 
 char * int512_toBase (int512 * self, unsigned base) {

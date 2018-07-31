@@ -43,7 +43,11 @@ void int512_set_min (int512 * self) ;
 
 void int512_set_max (int512 * self) ;
 
+void int512_set_value_fromLevel (int512 * self, int level, long value) ;
+
 void int512_set_value (int512 * self, long value) ;
+
+int int512_fromLevel_value (int512 * self, int level, long value) ;
 
 char * int512_toBase (int512 * self, unsigned base);
 
