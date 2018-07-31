@@ -489,17 +489,22 @@ int512 * int512_subtrahend_long (long minued, int512 * subtrahend) {
 	return self;
 }
 
+// @TODO portable algorithm
+static void mul_32 (long * resulth, long * resultl, long a, long b) {
+  __asm__(
+    "imull %3 \n\t"
+    :"=a" (*resultl), "=d" (*resulth)
+    :"a" (a), "rm" (b) :
+    );
+}
+
 static void int512_product_long_operation \
 	(int512 * self, int previousLevel, int fromLevel, long multiplier) {
 
-	register long \
-	levelOut0 = 0, // level value
-	levelOut1 = 0; // addition (out of level value)
+	long levelOut0 = 0, levelOut1 = 0;
 
 	for (int i = fromLevel; i >= 0; i--) {
-		levelOut0 = 0;
-		// @TODO cry all day all night
-		// need long*2 datatype to save levelOut
+
 	}
 }
 
