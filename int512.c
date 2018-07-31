@@ -492,12 +492,15 @@ int512 * int512_subtrahend_long (long minued, int512 * subtrahend) {
 static void int512_product_long_operation \
 	(int512 * self, int previousLevel, int fromLevel, long multiplier) {
 
+	register long \
+	levelOut0 = 0, // level value
+	levelOut1 = 0; // addition (out of level value)
 
-	register long levelOutFirst = 0, levelOutSecond = 0;
-
-
-
-
+	for (int i = fromLevel; i >= 0; i--) {
+		levelOut0 = 0;
+		// @TODO cry all day all night
+		// need long*2 datatype to save levelOut
+	}
 }
 
 void int512_product_long_byLevel (int512 * self, int level, long multiplier) {
@@ -512,7 +515,7 @@ void int512_product_long_byLevel (int512 * self, int level, long multiplier) {
 		return;
 	}
 
-	else if (int512_fromLevel_value (self, level, 0))
+	else if (int512_nullEntrance (self, level) == -1)
 		return;
 
 	else if (self->at[level] > 0) {
@@ -605,7 +608,7 @@ int int512_nullEntrance (int512 * self, int fromLevel) {
 
 	if (self == NULL) {
 		throw("null pointer in int512_nullEntrance()");
-		return;
+		return -42;
 	}
 
 	for (int i = fromLevel; i >= 0; i--)
