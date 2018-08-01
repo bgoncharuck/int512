@@ -489,6 +489,16 @@ int512 * int512_subtrahend_int (int minued, int512 * subtrahend) {
 	return self;
 }
 
+/*
+const byte layerSize= (sizeof(int) << 3) -1;
+
+void mult (int a, int b, int * l1, int * l2) {
+	long temp = a;
+	temp *= b;
+	*l1 = temp & layerSize;
+	*l2 = temp >> layerSize;
+}
+*/
 
 static void int512_product_int_operation \
 	(int512 * self, int previousLevel, int fromLevel, int multiplier) {
