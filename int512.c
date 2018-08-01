@@ -11,7 +11,7 @@
 
 // @INT512
 struct __int512 {
-	long at[COUNT_LEVEL];
+	int at[COUNT_LEVEL];
 };
 
 int512 * int512_new() {
@@ -34,7 +34,7 @@ void int512_free (int512 * self) {
 	free(self);
 }
 
-long int512_at (int512 * self, int i) {
+int int512_at (int512 * self, int i) {
 
 	if (self == NULL) {
 		throw("null pointer in int512_at()");
@@ -50,7 +50,7 @@ long int512_at (int512 * self, int i) {
 	return self->at[i];
 }
 
-void int512_set_at (int512 * self, int i, long value) {
+void int512_set_at (int512 * self, int i, int value) {
 
 	if (self == NULL) {
 		throw("null pointer in int512_setat()");
@@ -79,8 +79,8 @@ void int512_print (int512 * self) {
 	printf("\n");
 }
 
-static void int512_sum_long_posTop_negSum_negAddition \
-	(int512 * self, int previousLevel, int fromLevel, long addition) {
+static void int512_sum_int_posTop_negSum_negAddition \
+	(int512 * self, int previousLevel, int fromLevel, int addition) {
 
 	// _0_1_0_0_-2_4_7
 	if (self->at[previousLevel-1] > 0) {
@@ -99,7 +99,7 @@ static void int512_sum_long_posTop_negSum_negAddition \
 	else if (self->at[previousLevel-1] == 0) {
 
 		if (previousLevel != 1)
-			int512_sum_long_posTop_negSum_negAddition (self, previousLevel-1, fromLevel, addition);
+			int512_sum_int_posTop_negSum_negAddition (self, previousLevel-1, fromLevel, addition);
 
 		else {
 			// _0_0_0_0_-2_4_7 all lower levels are zeroes, so we just paste addition in current level
@@ -133,8 +133,8 @@ static void int512_sum_long_posTop_negSum_negAddition \
 	}
 }
 
-static void int512_sum_long_posTop_negSum_posAddition \
-	(int512 * self, int previousLevel, int fromLevel, long addition) {
+static void int512_sum_int_posTop_negSum_posAddition \
+	(int512 * self, int previousLevel, int fromLevel, int addition) {
 
 	// 0_3_9_9_-2_4_5
 	if (self->at[previousLevel-1] < LONG_MAX) {
@@ -152,7 +152,7 @@ static void int512_sum_long_posTop_negSum_posAddition \
 
 	else {
 		if (previousLevel != 1)
-			int512_sum_long_posTop_negSum_posAddition (self, previousLevel-1, fromLevel, addition);
+			int512_sum_int_posTop_negSum_posAddition (self, previousLevel-1, fromLevel, addition);
 
 		else {
 			// 9_9_9_9_-2_4_5 now we must create our own "out of bounders"
@@ -171,8 +171,8 @@ static void int512_sum_long_posTop_negSum_posAddition \
 	}
 }
 
-static void int512_sum_long_negTop_posSum_posAddition \
-	(int512 * self, int previousLevel, int fromLevel, long addition) {
+static void int512_sum_int_negTop_posSum_posAddition \
+	(int512 * self, int previousLevel, int fromLevel, int addition) {
 
 	// 0_-3_0_0_3_-3_-4
 	if (self->at[previousLevel-1] < 0) {
@@ -190,7 +190,7 @@ static void int512_sum_long_negTop_posSum_posAddition \
 
 	else {
 		if (previousLevel != 1)
-			int512_sum_long_negTop_posSum_posAddition (self, previousLevel-1, fromLevel, addition);
+			int512_sum_int_negTop_posSum_posAddition (self, previousLevel-1, fromLevel, addition);
 
 		else {
 			// 0_0_0_3_-3_-4 all lower levels are zeroes, so we just paste addition in current level
@@ -225,8 +225,8 @@ static void int512_sum_long_negTop_posSum_posAddition \
 	}
 }
 
-static void int512_sum_long_negTop_posSum_negAddition \
-	(int512 * self, int previousLevel, int fromLevel, long addition) {
+static void int512_sum_int_negTop_posSum_negAddition \
+	(int512 * self, int previousLevel, int fromLevel, int addition) {
 
 	// _0_-2_-9_-9_3_-4_-2
 	if (self->at[previousLevel-1] > LONG_MIN) {
@@ -244,7 +244,7 @@ static void int512_sum_long_negTop_posSum_negAddition \
 
 	else {
 		if (previousLevel != 1)
-			int512_sum_long_negTop_posSum_negAddition (self, previousLevel-1, fromLevel, addition);
+			int512_sum_int_negTop_posSum_negAddition (self, previousLevel-1, fromLevel, addition);
 
 		else {
 			// _-9_-9_-9_3_-4_-2 let's create our own "out of bounders"
@@ -263,10 +263,10 @@ static void int512_sum_long_negTop_posSum_negAddition \
 	}
 }
 
-void int512_sum_long_byLevel (int512 * self, int level, long addition) {
+void int512_sum_int_byLevel (int512 * self, int level, int addition) {
 
 	if (self == NULL) {
-		throw("null pointer in int512_sum_long()");
+		throw("null pointer in int512_sum_int()");
 		return;
 	}
 	//
@@ -286,14 +286,14 @@ void int512_sum_long_byLevel (int512 * self, int level, long addition) {
 
 				addition += self->at[level];
 
-				int512_sum_long_posTop_negSum_negAddition (self, level, level, addition);
+				int512_sum_int_posTop_negSum_negAddition (self, level, level, addition);
 			}
 
 			else {
 
 				addition = LONG_MAX - self->at[level] - addition;
 
-				int512_sum_long_posTop_negSum_posAddition (self, level, level, addition);
+				int512_sum_int_posTop_negSum_posAddition (self, level, level, addition);
 			}
 
 		}
@@ -303,8 +303,8 @@ void int512_sum_long_byLevel (int512 * self, int level, long addition) {
 				self->at[level] = 0;
 
 			else {
-				int512_sum_long_byLevel (self, level, addition-1);
-				int512_sum_long_byLevel (self, level, 1);
+				int512_sum_int_byLevel (self, level, addition-1);
+				int512_sum_int_byLevel (self, level, 1);
 			}
 		}
 
@@ -324,13 +324,13 @@ void int512_sum_long_byLevel (int512 * self, int level, long addition) {
 
 				addition += self->at[level];
 
-				int512_sum_long_negTop_posSum_posAddition (self, level, level, addition);
+				int512_sum_int_negTop_posSum_posAddition (self, level, level, addition);
 			}
 
 			else {
 				addition = LONG_MIN - self->at[level] - addition;
 
-				int512_sum_long_negTop_posSum_negAddition (self, level, level, addition);
+				int512_sum_int_negTop_posSum_negAddition (self, level, level, addition);
 			}
 		}
 
@@ -339,22 +339,22 @@ void int512_sum_long_byLevel (int512 * self, int level, long addition) {
 				self->at[level] = 0;
 
 			else {
-				int512_sum_long_byLevel (self, level, addition+1);
-				int512_sum_long_byLevel (self, level, -1);
+				int512_sum_int_byLevel (self, level, addition+1);
+				int512_sum_int_byLevel (self, level, -1);
 			}
 		}
 	}
 }
 
-void int512_sum_long (int512 * self, long addition) {
+void int512_sum_int (int512 * self, int addition) {
 
-	int512_sum_long_byLevel (self, TOP_LEVEL, addition);
+	int512_sum_int_byLevel (self, TOP_LEVEL, addition);
 }
 
-void int512_difference_long (int512 * self, long subtrahend) {
+void int512_difference_int (int512 * self, int subtrahend) {
 
 	if (self == NULL) {
-		throw("null pointer in int512_difference_long()");
+		throw("null pointer in int512_difference_int()");
 		return;
 	}
 
@@ -362,15 +362,15 @@ void int512_difference_long (int512 * self, long subtrahend) {
 
 	// example in ascii char : -128 * (-1) != 128, because 127 is max
 	// solution is	x * (-1) == x - x*2 == 0 - x
-	long addition = 0; addition -= subtrahend;
+	int addition = 0; addition -= subtrahend;
 
-	int512_sum_long (self, addition);
+	int512_sum_int (self, addition);
 }
 
-int int512_compare_long (int512 * self, long toCompare) {
+int int512_compare_int (int512 * self, int toCompare) {
 
 	if (self == NULL) {
-		throw("null pointer in int512_compare_long()");
+		throw("null pointer in int512_compare_int()");
 		return 0;
 	}
 
@@ -440,7 +440,7 @@ void int512_sum_int512 (int512 * first, int512 * second) {
 	}
 
 	for (int i = TOP_LEVEL; i >= 0; i--)
-		int512_sum_long_byLevel (first, i, second->at[i]);
+		int512_sum_int_byLevel (first, i, second->at[i]);
 }
 
 int512 * int512_sum_new (int512 * first, int512 * second) {
@@ -465,53 +465,45 @@ void int512_difference_int512 (int512 * first, int512 * second) {
 		return;
 	}
 
-	// see difference for long
-	long temporary = 0;
+	// see difference for int
+	int temporary = 0;
 
 	for (int i = TOP_LEVEL; i >= 0; i--) {
 		temporary -= second->at[i];
-		int512_sum_long_byLevel (first, i, temporary);
+		int512_sum_int_byLevel (first, i, temporary);
 		temporary = 0;
 	}
 }
 
-int512 * int512_subtrahend_long (long minued, int512 * subtrahend) {
+int512 * int512_subtrahend_int (int minued, int512 * subtrahend) {
 
 	if (subtrahend == NULL) {
-		throw("null pointer in int512_subtrahend_long()");
+		throw("null pointer in int512_subtrahend_int()");
 		return NULL;
 	}
 
 	int512 * self = int512_new();
-	int512_sum_long (self, minued);
+	int512_sum_int (self, minued);
 	int512_difference_int512 (self, subtrahend);
 
 	return self;
 }
 
-// @TODO portable algorithm
-static void mul_32 (long * resulth, long * resultl, long a, long b) {
-  __asm__(
-    "imull %3 \n\t"
-    :"=a" (*resultl), "=d" (*resulth)
-    :"a" (a), "rm" (b) :
-    );
-}
 
-static void int512_product_long_operation \
-	(int512 * self, int previousLevel, int fromLevel, long multiplier) {
+static void int512_product_int_operation \
+	(int512 * self, int previousLevel, int fromLevel, int multiplier) {
 
-	long levelOut0 = 0, levelOut1 = 0;
+	int levelOut0 = 0, levelOut1 = 0;
 
 	for (int i = fromLevel; i >= 0; i--) {
 
 	}
 }
 
-void int512_product_long_byLevel (int512 * self, int level, long multiplier) {
+void int512_product_int_byLevel (int512 * self, int level, int multiplier) {
 
 	if (self == NULL) {
-		throw("null pointer in int512_product_long()");
+		throw("null pointer in int512_product_int()");
 		return;
 	}
 
@@ -554,7 +546,7 @@ void int512_product_int512 (int512 * base, int512 * multiplier) {
 		// sumArray[i] = int512_new();
 }
 
-void int512_set_value_fromLevel (int512 * self, int level, long value) {
+void int512_set_value_fromLevel (int512 * self, int level, int value) {
 
 	if (self == NULL) {
 		throw("null pointer in int512_set_value_fromLevel()");
@@ -565,7 +557,7 @@ void int512_set_value_fromLevel (int512 * self, int level, long value) {
 		self->at[i] = value;
 }
 
-void int512_set_value (int512 * self, long value) {
+void int512_set_value (int512 * self, int value) {
 
 	int512_set_value_fromLevel (self, TOP_LEVEL, value);
 }
@@ -580,7 +572,7 @@ void int512_set_max (int512 * self) {
 	int512_set_value (self, LONG_MAX);
 }
 
-int int512_fromLevel_value (int512 * self, int fromLevel, long value) {
+int int512_fromLevel_value (int512 * self, int fromLevel, int value) {
 
 	if (self == NULL) {
 		throw("null pointer in int512_fromLevel_value()");
