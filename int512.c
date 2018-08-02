@@ -489,24 +489,45 @@ int512 * int512_subtrahend_int (int minued, int512 * subtrahend) {
 	return self;
 }
 
-/*
-const byte layerSize= (sizeof(int) << 3) -1;
 
-void mult (int a, int b, int * l1, int * l2) {
-	long temp = a;
-	temp *= b;
-	*l1 = temp & layerSize;
-	*l2 = temp >> layerSize;
+void int512_leveledProduct_inTwoLong (long * resulth, long * resultl, int a, int b) {
+  __asm__(
+    "imull %3 \n\t"
+    :"=a" (*resultl), "=d" (*resulth)
+    :"a" (a), "rm" (b) :
+    );
 }
-*/
 
 static void int512_product_int_operation \
 	(int512 * self, int previousLevel, int fromLevel, int multiplier) {
 
-	int levelOut0 = 0, levelOut1 = 0;
+	long lvlOut0 = 0, // addition
+	lvlOut1 = 0, // level
+	lvlOut2 - 0; // save
 
-	for (int i = fromLevel; i >= 0; i--) {
+	for (int i = fromLevel; i > 0; i--) {
+		lvlOut0 = 0; lvlOut1 = 0;
+		int512_leveledProduct_inTwoLong (&lvlOut0, &lvlOut1, self->at[i], multiplier);
 
+		if (lvlOut0 == 0 && lvlOut1 <= INT_MAX)
+			self->at[i] = lvlOut1;
+
+		else {
+			if (lvlOut1 > INT_MAX)
+				while (lvlOut1 > INT_MAX) {
+					lvlOut1 -= INT_MAX;
+					lvlOut0++;
+				}
+
+			self->at[i] = lvlOut1;
+		}
+
+		if ((self->at[i] + lvlOut2) < 0)
+			// @TODO
+			continue;
+
+		else
+			self->at[i] += lvlOut2;
 	}
 }
 
