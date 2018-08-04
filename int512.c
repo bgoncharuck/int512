@@ -501,33 +501,30 @@ void int512_leveledProduct_inTwoLong (long * resulth, long * resultl, int a, int
 static void int512_product_int_operation \
 	(int512 * self, int previousLevel, int fromLevel, int multiplier) {
 
-	long lvlOut0 = 0, // addition
+	long lvlOut0 = 0, // level
 	lvlOut1 = 0, // level
-	lvlOut2 - 0; // save
+	lvlOut2 = 0; // addition
 
 	for (int i = fromLevel; i > 0; i--) {
 		lvlOut0 = 0; lvlOut1 = 0;
 		int512_leveledProduct_inTwoLong (&lvlOut0, &lvlOut1, self->at[i], multiplier);
 
-		if (lvlOut0 == 0 && lvlOut1 <= INT_MAX)
-			self->at[i] = lvlOut1;
+		if (lvlOut1 > INT_MAX)
+			while (lvlOut1 > INT_MAX) {
+				lvlOut1 -= INT_MAX;
+				lvlOut0++;
+			}
 
-		else {
-			if (lvlOut1 > INT_MAX)
-				while (lvlOut1 > INT_MAX) {
-					lvlOut1 -= INT_MAX;
-					lvlOut0++;
-				}
-
-			self->at[i] = lvlOut1;
+		if ((lvlOut1 + lvlOut2) > INT_MAX) {
+			while ((lvlOut1 + lvlOut2) > INT_MAX) {
+				lvlOut2 -= INT_MAX;
+				lvlOut0++;
+			}
 		}
 
-		if ((self->at[i] + lvlOut2) < 0)
-			// @TODO
-			continue;
+		self->at[i] = lvlOut1 + lvlOut2;
 
-		else
-			self->at[i] += lvlOut2;
+		lvlOut2 = lvlOut0;
 	}
 }
 
