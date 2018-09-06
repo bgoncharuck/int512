@@ -489,7 +489,6 @@ int512 * int512_subtrahend_int (int minued, int512 * subtrahend) {
 	return self;
 }
 
-// NOT PORTABLE !
 /*
 void int512_leveledProduct_inTwoLong (long * resulth, long * resultl, int a, int b) {
   __asm__(
@@ -510,7 +509,6 @@ void int512_leveledProduct_inTwoLong (long * resulth, long * resultl, int a, int
 static void int512_product_int_operation \
 	(int512 * self, int previousLevel, int fromLevel, int multiplier) {
 
-	/*
 	long lvlOut0 = 0, // level
 	lvlOut1 = 0, // level
 	lvlOut2 = 0; // addition
@@ -537,12 +535,14 @@ static void int512_product_int_operation \
 		lvlOut2 = lvlOut0;
 	}
 
+	// If i == 0 && lvlOut2 != 0 we must create out of borders
 	if (lvlOut2 != 0) {
 
+		for (int i = 0; i <= TOP_LEVEL; i++)
+			self->at[i] *= -1;
 
-
+		self->at[0] += lvlOut2;
 	}
-	*/
 }
 
 void int512_product_int_byLevel (int512 * self, int level, int multiplier) {
