@@ -489,6 +489,15 @@ int512 * int512_subtrahend_int (int minued, int512 * subtrahend) {
 	return self;
 }
 
+
+void int512_changeSign (int512 * self) {
+	for (int i = TOP_LEVEL; i >= 0; i--) {
+		int temp = self->at[i];
+		temp = temp - self->at[i] - self->at[i];
+		self->at[i] = temp;
+	}
+}
+
 /*
 void int512_leveledProduct_inTwoLong (long * resulth, long * resultl, int a, int b) {
   __asm__(
@@ -562,33 +571,35 @@ void int512_product_int_byLevel (int512 * self, int level, int multiplier) {
 
 	else if (self->at[level] > 0) {
 		if (multiplier > 0) {
-
-
+			int512_product_int_operation (self, level, level, multiplier);
 		}
+
 		else {
-
-
+			int temp = 0; temp -= multiplier; temp -= multiplier;
+			int512_product_int_operation (self, level, level, temp);
+			int512_changeSign (self);
 		}
 	}
 
 	else if (self->at[level] < 0) {
 		if (multiplier > 0) {
-
-
+			int512_changeSign (self);
+			int512_product_int_operation (self, level, level, multiplier);
+			int512_changeSign (self);
 		}
+
 		else {
-
-
+			int512_changeSign (self);
+			int temp = 0; temp -= multiplier; temp -= multiplier;
+			int512_product_int_operation (self, level, level, temp);
+			int512_changeSign (self);
 		}
 	}
 }
 
 void int512_product_int512 (int512 * base, int512 * multiplier) {
 
-	// i will use int512 as temp values array (not in usual way)
-	// int512 * sumArray[fromLevel + 1];
-	// for (int i = 0; i <= fromLevel; i++)
-		// sumArray[i] = int512_new();
+
 }
 
 void int512_set_value_fromLevel (int512 * self, int level, int value) {
