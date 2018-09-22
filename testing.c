@@ -21,18 +21,17 @@ int main (void) {
 	printf ("\n\n");
 	int512_print (b);
 	printf ("\n\n");
-	int512_sum_long (a, 2);
+	int512_sum_int (a, 2);
 	int512_print (a);
 	printf ("\n\n");
-	int512_sum_long (b, -2);
+	int512_sum_int (b, -2);
 	int512_print (b);
 
 	printf ("\n\nLOLKEK-LOLKEK\n\n");
-	int512_sum_long (c, LONG_MAX);
+	int512_sum_int (c, INT_MAX);
 	int512_print (c);
-	int512_sum_long (c, LONG_MAX);
+	int512_sum_int (c, INT_MAX);
 	int512_print (c);
-
 
 	int512_free (a);
 	int512_free (b);

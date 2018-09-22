@@ -14,6 +14,7 @@ void int512_free (int512 * self) ;
 
 int int512_at (int512 * self, int i) ;
 
+
 void int512_set_at (int512 * self, int i, int value) ;
 
 void int512_print (int512 * self) ;
@@ -50,7 +51,10 @@ void int512_set_value (int512 * self, int value) ;
 
 int int512_fromLevel_value (int512 * self, int level, int value) ;
 
+/*
 int int512_nullEntrance (int512 * self, int fromLevel) {
+*/
+
 
 char * int512_toBase (int512 * self, unsigned base);
 

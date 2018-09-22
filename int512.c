@@ -566,8 +566,8 @@ void int512_product_int_byLevel (int512 * self, int level, int multiplier) {
 		return;
 	}
 
-	else if (int512_nullEntrance (self, level) == -1)
-		return;
+	// else if (int512_nullEntrance (self, level) == -1)
+	// 	return;
 
 	else if (self->at[level] > 0) {
 		if (multiplier > 0) {
@@ -632,7 +632,7 @@ int int512_fromLevel_value (int512 * self, int fromLevel, int value) {
 
 	if (self == NULL) {
 		throw("null pointer in int512_fromLevel_value()");
-		return;
+		return 0;
 	}
 
 	if (value != 0) {
@@ -657,11 +657,12 @@ int int512_fromLevel_value (int512 * self, int fromLevel, int value) {
 	return 1;
 }
 
+/*
 int int512_nullEntrance (int512 * self, int fromLevel) {
 
 	if (self == NULL) {
 		throw("null pointer in int512_nullEntrance()");
-		return -42;
+		return 0;
 	}
 
 	for (int i = fromLevel; i >= 0; i--)
@@ -670,6 +671,7 @@ int int512_nullEntrance (int512 * self, int fromLevel) {
 
 	return -1;
 }
+*/
 
 char * int512_toBase (int512 * self, unsigned base) {
 
