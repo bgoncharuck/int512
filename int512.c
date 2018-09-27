@@ -605,12 +605,25 @@ int512 * int512_product_byLevel_new (int512 * self, int level, int multiplier) {
 	return result;
 }
 
+int512 * int512_product_byLevel_new_clean (int512 * self, int level, int multiplier) {
+
+	int512 * result = int512_copy_new (self);
+	if (level != TOP_LEVEL)
+		int512_set_value_toLevel (self, level+1, 0);
+	int512_product_int_byLevel (result, level, multiplier);
+
+	return result;
+}
+
 void int512_product_int512 (int512 * base, int512 * multiplier) {
 
 	int512 * sumBuffer [COUNT_LEVEL];
 
-	// for (int currentLevelMultiper = TOP_LEVEL; currentLevelMultiper >= 0; currentLevelMultiper--)
+	for (int currentLevelMultiper = TOP_LEVEL; currentLevelMultiper >= 0; currentLevelMultiper--)
+		sumBuffer[currentLevelMultiper] = int512_product_byLevel_new (base, currentLevelMultiper, multiplier[currentLevelMultiper])
 
+	for (int stackSum = 0; stackSum < COUNT_LEVEL; stackSum++)
+		int512_sum_int512 (base, sumBuffer[stackSum]);
 }
 
 void int512_set_value_fromLevel (int512 * self, int level, int value) {
