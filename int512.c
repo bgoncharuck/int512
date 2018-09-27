@@ -620,7 +620,7 @@ void int512_mult_int512 (int512 * base, int512 * multiplier) {
 	int512 * sumBuffer [COUNT_LEVEL];
 
 	for (int currentLevelMultiper = TOP_LEVEL; currentLevelMultiper >= 0; currentLevelMultiper--)
-		sumBuffer[currentLevelMultiper] = int512_product_byLevel_new (base, currentLevelMultiper, multiplier[currentLevelMultiper])
+		sumBuffer[currentLevelMultiper] = int512_product_byLevel_new_clean (base, currentLevelMultiper, multiplier[currentLevelMultiper])
 
 	for (int stackSum = 0; stackSum < COUNT_LEVEL; stackSum++) {
 		int512_sum_int512 (base, sumBuffer[stackSum]);
