@@ -518,39 +518,39 @@ void int512_leveledProduct_inTwoLong (long * resulth, long * resultl, int a, int
 static void int512_product_int_operation \
 	(int512 * self, int previousLevel, int fromLevel, int multiplier) {
 
-	long lvlOut0 = 0, // level
-	lvlOut1 = 0, // level
-	lvlOut2 = 0; // addition
+	long addition = 0,
+	level = 0,
+	savedValue = 0;
 
 	for (int i = fromLevel; i > 0; i--) {
-		lvlOut0 = 0; lvlOut1 = 0;
-		int512_leveledProduct_inTwoLong (&lvlOut0, &lvlOut1, self->at[i], multiplier);
+		addition = 0; level = 0;
+		int512_leveledProduct_inTwoLong (&addition, &level, self->at[i], multiplier);
 
-		if (lvlOut1 > INT_MAX)
-			while (lvlOut1 > INT_MAX) {
-				lvlOut1 -= INT_MAX;
-				lvlOut0++;
+		if (level > INT_MAX)
+			while (level > INT_MAX) {
+				level -= INT_MAX;
+				addition++;
 			}
 
-		if ((lvlOut1 + lvlOut2) > INT_MAX)
-			while ((lvlOut1 + lvlOut2) > INT_MAX) {
-				lvlOut2 -= INT_MAX;
-				lvlOut0++;
+		if ((level + savedValue) > INT_MAX)
+			while ((level + savedValue) > INT_MAX) {
+				savedValue -= INT_MAX;
+				addition++;
 			}
 
 
-		self->at[i] = lvlOut1 + lvlOut2;
+		self->at[i] = level + savedValue;
 
-		lvlOut2 = lvlOut0;
+		savedValue = addition;
 	}
 
-	// If i == 0 && lvlOut2 != 0 we must create out of borders
-	if (lvlOut2 != 0) {
+	// If i == 0 && savedValue != 0 we must create out of borders
+	if (savedValue != 0) {
 
 		for (int i = 0; i <= TOP_LEVEL; i++)
 			self->at[i] *= -1;
 
-		self->at[0] += lvlOut2;
+		self->at[0] += savedValue;
 	}
 }
 
@@ -597,8 +597,19 @@ void int512_product_int_byLevel (int512 * self, int level, int multiplier) {
 	}
 }
 
+int512 * int512_product_byLevel_new (int512 * self, int level, int multiplier) {
+
+	int512 * result = int512_copy_new (self);
+	int512_product_int_byLevel (result, level, multiplier);
+
+	return result;
+}
+
 void int512_product_int512 (int512 * base, int512 * multiplier) {
 
+	int512 * sumBuffer [COUNT_LEVEL];
+
+	// for (int currentLevelMultiper = TOP_LEVEL; currentLevelMultiper >= 0; currentLevelMultiper--)
 
 }
 
@@ -610,6 +621,17 @@ void int512_set_value_fromLevel (int512 * self, int level, int value) {
 	}
 
 	for (int i = level; i >= 0; i--)
+		self->at[i] = value;
+}
+
+void int512_set_value_toLevel (int512 * self, int level, int value) {
+
+	if (self == NULL) {
+		throw("null pointer in int512_set_value_fromLevel()");
+		return;
+	}
+
+	for (int i = level; i <= TOP_LEVEL; i++)
 		self->at[i] = value;
 }
 
