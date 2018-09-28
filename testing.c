@@ -13,6 +13,8 @@ int main (void) {
 	int512 * c = int512_new();
 	int512 * d = int512_new();
 	int512 * e = int512_new();
+	int512 * z = int512_new();
+	int512 * x = int512_new();
 
 	int512_set_max (a);
 	int512_set_min (b);
@@ -33,7 +35,15 @@ int main (void) {
 	int512_sum_int (c, INT_MAX);
 	int512_print (c);
 
+	int512_sum_int (d, 42);
+	int512_set_value (e, 2);
+	int512_set_value (x, 2);
+
 	printf ("\n\nMultn\n");
+	int512_product_int_byLevel (x, TOP_LEVEL, 42);
+	int512_print(x);
+	int512_mult_int512 (e, d);
+	int512_print(e);
 
 	int512_free (a);
 	int512_free (b);
