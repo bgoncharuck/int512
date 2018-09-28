@@ -490,9 +490,7 @@ int512 * int512_subtrahend_int (int minued, int512 * subtrahend) {
 
 void int512_changeSign (int512 * self) {
 	for (int i = TOP_LEVEL; i >= 0; i--) {
-		int temp = self->at[i];
-		temp = temp - self->at[i] - self->at[i];
-		self->at[i] = temp;
+		self->at[i] *= -1;
 	}
 }
 
@@ -520,7 +518,7 @@ static void int512_product_int_operation \
 	level = 0,
 	savedValue = 0;
 
-	for (int i = fromLevel; i > 0; i--) {
+	for (int i = fromLevel; i >= 0; i--) {
 		addition = 0; level = 0;
 		int512_leveledProduct_inTwoLong (&addition, &level, self->at[i], multiplier);
 
@@ -573,7 +571,8 @@ void int512_product_int_byLevel (int512 * self, int level, int multiplier) {
 		}
 
 		else {
-			int temp = 0; temp -= multiplier; temp -= multiplier;
+			int temp = ~multiplier + 1;
+			printf("%d\n", temp);
 			int512_product_int_operation (self, level, level, temp);
 			int512_changeSign (self);
 		}
@@ -588,7 +587,7 @@ void int512_product_int_byLevel (int512 * self, int level, int multiplier) {
 
 		else {
 			int512_changeSign (self);
-			int temp = 0; temp -= multiplier; temp -= multiplier;
+			int temp = ~multiplier + 1;
 			int512_product_int_operation (self, level, level, temp);
 			int512_changeSign (self);
 		}
