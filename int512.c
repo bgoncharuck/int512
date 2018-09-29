@@ -9,7 +9,7 @@
 
 // @INT512
 struct __int512 {
-	int at[COUNT_LEVEL];
+	signed int at[COUNT_LEVEL];
 };
 
 int512 * int512_new() {
@@ -72,7 +72,7 @@ void int512_print (int512 * self) {
 	}
 
 	for (int i = 0; i <= TOP_LEVEL; i++)
-		printf ("_%ld", self->at[i]);
+		printf ("_%d", self->at[i]);
 
 	printf("\n");
 }
@@ -488,12 +488,6 @@ int512 * int512_subtrahend_int (int minued, int512 * subtrahend) {
 }
 
 
-void int512_changeSign (int512 * self) {
-	for (int i = TOP_LEVEL; i >= 0; i--) {
-		self->at[i] *= -1;
-	}
-}
-
 /*
 void int512_leveledProduct_inTwoLong (long * resulth, long * resultl, int a, int b) {
   __asm__(
@@ -572,7 +566,6 @@ void int512_product_int_byLevel (int512 * self, int level, int multiplier) {
 
 		else {
 			int temp = ~multiplier + 1;
-			printf("%d\n", temp);
 			int512_product_int_operation (self, level, level, temp);
 			int512_changeSign (self);
 		}
@@ -661,6 +654,14 @@ void int512_set_min (int512 * self) {
 void int512_set_max (int512 * self) {
 
 	int512_set_value (self, INT_MAX);
+}
+
+void int512_changeSign (int512 * self) {
+	for (int i = TOP_LEVEL; i >= 0; i--)
+		if (self->at[i] < 0)
+			self->at[i] = ~self->at[i] + 1;
+		else
+			self->at[i] = ~(self->at[i] - 1);
 }
 
 int int512_fromLevel_value (int512 * self, int fromLevel, int value) {

@@ -51,5 +51,8 @@ int main (void) {
 	int512_free (d);
 	int512_free (e);
 
+	int kek = 52;
+	printf("KEK: %d\n", ~(kek - 1));
+
 	return EXIT_SUCCESS;
 }
