@@ -63,7 +63,7 @@ void int512_set_min (int512 * self) ;
 
 void int512_set_max (int512 * self) ;
 
-int int512_fromLevel_value (int512 * self, int fromLevel, int value) ;
+// int int512_fromLevel_value (int512 * self, int fromLevel, int value) ;
 
 char * int512_toBase (int512 * self, unsigned base) ;
 

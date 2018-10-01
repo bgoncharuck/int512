@@ -609,17 +609,30 @@ void int512_mult_int512 (int512 * base, int512 * multiplier) {
 
 	int512 * sumBuffer [COUNT_LEVEL];
 
-	for (int currentLevelMultiper = TOP_LEVEL; currentLevelMultiper >= 0; currentLevelMultiper--) {
+	for (int currentLevelMultiper = TOP_LEVEL; currentLevelMultiper >= 0; currentLevelMultiper--)
 		sumBuffer[currentLevelMultiper] = int512_product_byLevel_new_clean (base, currentLevelMultiper, multiplier->at[currentLevelMultiper]);
-	}
 
 	int512_set_value(base, 0);
 
-	for (int sum = TOP_LEVEL; sum >= 0; sum--) {
-		int512_sum_int512 (base, sumBuffer[sum]);
-		int512_free (sumBuffer[sum]);
+	for (int stackSum = 0; stackSum < COUNT_LEVEL; stackSum++) {
+		int512_sum_int512 (base, sumBuffer[stackSum]);
+		int512_free (sumBuffer[stackSum]);
 	}
+}
 
+int512 * int512_mult_int512_new (int512 * base, int512 * multiplier) {
+
+	int512 * sumBuffer [COUNT_LEVEL];
+
+	for (int currentLevelMultiper = TOP_LEVEL; currentLevelMultiper >= 0; currentLevelMultiper--)
+		sumBuffer[currentLevelMultiper] = int512_product_byLevel_new_clean (base, currentLevelMultiper, multiplier->at[currentLevelMultiper]);
+
+	int512 * result = int512_new();
+
+	for (int stackSum = 0; stackSum < COUNT_LEVEL; stackSum++) {
+		int512_sum_int512 (result, sumBuffer[stackSum]);
+		int512_free (sumBuffer[stackSum]);
+	}
 }
 
 void int512_set_value_fromLevel (int512 * self, int level, int value) {
@@ -667,6 +680,11 @@ void int512_changeSign (int512 * self) {
 			self->at[i] = ~(self->at[i] - 1);
 }
 
+void int512_divide_int (int512 * self, int divider) {
+
+}
+
+/*
 int int512_fromLevel_value (int512 * self, int fromLevel, int value) {
 
 	if (self == NULL) {
@@ -695,6 +713,7 @@ int int512_fromLevel_value (int512 * self, int fromLevel, int value) {
 
 	return 1;
 }
+*/
 
 /*
 int int512_nullEntrance (int512 * self, int fromLevel) {
