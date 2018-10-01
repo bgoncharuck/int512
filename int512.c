@@ -599,7 +599,7 @@ int512 * int512_product_byLevel_new_clean (int512 * self, int level, int multipl
 
 	int512 * result = int512_copy_new (self);
 	if (level != TOP_LEVEL)
-		int512_set_value_toLevel (self, level+1, 0);
+		int512_set_value_toLevel (result, level+1, 0);
 	int512_product_int_byLevel (result, level, multiplier);
 
 	return result;
@@ -609,12 +609,15 @@ void int512_mult_int512 (int512 * base, int512 * multiplier) {
 
 	int512 * sumBuffer [COUNT_LEVEL];
 
-	for (int currentLevelMultiper = TOP_LEVEL; currentLevelMultiper >= 0; currentLevelMultiper--)
+	for (int currentLevelMultiper = TOP_LEVEL; currentLevelMultiper >= 0; currentLevelMultiper--) {
 		sumBuffer[currentLevelMultiper] = int512_product_byLevel_new_clean (base, currentLevelMultiper, multiplier->at[currentLevelMultiper]);
+	}
 
-	for (int stackSum = 0; stackSum < COUNT_LEVEL; stackSum++) {
-		int512_sum_int512 (base, sumBuffer[stackSum]);
-		int512_free (sumBuffer[stackSum]);
+	int512_set_value(base, 0);
+
+	for (int sum = TOP_LEVEL; sum >= 0; sum--) {
+		int512_sum_int512 (base, sumBuffer[sum]);
+		int512_free (sumBuffer[sum]);
 	}
 
 }

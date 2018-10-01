@@ -42,8 +42,8 @@ int main (void) {
 	printf ("\n\nMultn\n");
 	int512_product_int_byLevel (x, TOP_LEVEL, -42);
 	int512_print(x);
-	int512_mult_int512 (e, d);
-	int512_print(e);
+	int512_mult_int512 (d, e);
+	int512_print(d);
 
 	int512_free (a);
 	int512_free (b);
