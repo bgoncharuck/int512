@@ -556,9 +556,6 @@ void int512_product_int_byLevel (int512 * self, int level, int multiplier) {
 		return;
 	}
 
-	// else if (int512_nullEntrance (self, level) == -1)
-	// 	return;
-
 	else if (self->at[level] > 0) {
 		if (multiplier > 0) {
 			int512_product_int_operation (self, level, level, multiplier);
@@ -683,53 +680,6 @@ void int512_changeSign (int512 * self) {
 void int512_divide_int (int512 * self, int divider) {
 
 }
-
-/*
-int int512_fromLevel_value (int512 * self, int fromLevel, int value) {
-
-	if (self == NULL) {
-		throw("null pointer in int512_fromLevel_value()");
-		return 0;
-	}
-
-	if (value != 0) {
-		for (int i = fromLevel; i >= 0; i--)
-
-			if (self->at[i] == 0) {
-				if (i == fromLevel) return 0;
-
-				else if (self->at[i+1] == 0 && self->at[i] != 0)
-					return 0;
-			}
-
-			else if (self->at[i] != value)
-				return 0;
-	}
-	else {
-		for (int i = fromLevel; i >= 0; i--)
-			if (self->at[i] != 0)
-				return 0;
-	}
-
-	return 1;
-}
-*/
-
-/*
-int int512_nullEntrance (int512 * self, int fromLevel) {
-
-	if (self == NULL) {
-		throw("null pointer in int512_nullEntrance()");
-		return 0;
-	}
-
-	for (int i = fromLevel; i >= 0; i--)
-		if (self->at[i] != 0)
-			return i;
-
-	return -1;
-}
-*/
 
 char * int512_toBase (int512 * self, unsigned base) {
 
