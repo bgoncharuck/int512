@@ -273,12 +273,12 @@ void int512_sum_int_byLevel (int512 * self, int level, int addition) {
 	//
 	else if (self->at[level] >= 0) {
 
-		if ((self->at[level] + addition) > 0) {
+		if (self->at[level] < INT_MAX - addition) {
 			self->at[level] += addition;
 			return;
 		}
 
-		else if ((self->at[level] + addition) < 0) {
+		else if (self->at[level] > INT_MAX - addition) {
 
 			if (addition < 0) {
 
@@ -311,12 +311,12 @@ void int512_sum_int_byLevel (int512 * self, int level, int addition) {
 	//
 	else if (self->at[level] < 0) {
 
-		if ((self->at[level] + addition) < 0) {
+		if (self->at[level] > INT_MIN + addition) {
 			self->at[level] += addition;
 			return;
 		}
 
-		else if ((self->at[level] + addition) > 0) {
+		else if (self->at[level] < INT_MIN + addition) {
 
 			if (addition > 0) {
 
@@ -516,18 +516,15 @@ static void int512_product_int_operation \
 		addition = 0; level = 0;
 		int512_leveledProduct_inTwoLong (&addition, &level, self->at[i], multiplier);
 
-		if (level > INT_MAX)
-			while (level > INT_MAX) {
-				level -= INT_MAX;
-				addition++;
-			}
+		if (level > INT_MAX) {
+			addition += level / INT_MAX;
+			level %= INT_MAX;
+		}
 
-		if ((level + savedValue) > INT_MAX)
-			while ((level + savedValue) > INT_MAX) {
-				savedValue -= INT_MAX;
-				addition++;
-			}
-
+		if (level > INT_MAX - savedValue) {
+			addition += savedValue / INT_MAX;
+			savedValue %= INT_MAX;
+		}
 
 		self->at[i] = level + savedValue;
 
@@ -679,9 +676,11 @@ void int512_changeSign (int512 * self) {
 
 void int512_divide_int (int512 * self, int divider) {
 
+
 }
 
 char * int512_toBase (int512 * self, unsigned base) {
+
 
 	return NULL;
 }
