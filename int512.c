@@ -676,7 +676,7 @@ void int512_changeSign (int512 * self) {
 
 void int512_divide_int (int512 * self, int divider) {
 
-
+	
 }
 
 char * int512_toBase (int512 * self, unsigned base) {
