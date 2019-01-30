@@ -137,7 +137,7 @@ static void int512_sum_int_posTop_negSum_posAddition \
 	// 0_3_9_9_-2_4_5
 	if (self->at[previousLevel-1] < INT_MAX) {
 
-		// 0_4_9_9_-2_4_5 increase current level by one
+	// 0_4_9_9_-2_4_5 increase current level by one
 		self->at[previousLevel-1]++;
 
 		// 0_4_0_0_-2_4_5 change all levels till fromLevel to zero
@@ -676,7 +676,7 @@ void int512_changeSign (int512 * self) {
 
 void int512_divide_int (int512 * self, int divider) {
 
-	
+
 }
 
 char * int512_toBase (int512 * self, unsigned base) {
